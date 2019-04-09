@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="../libraries/p5.js"></script>
+    <script src="../libraries/p5.dom.js"></script>
+    <meta name="viewport" content="width = device-width, initial-scale=1.0, user-scalable=no">
+    <style>
+      html, body, canvas {
+      	overscroll-behavior: none;
+      }
+      body {
+        position: fixed;
+      }
+      canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+      }
+      p {
+        display: inline-block;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-right: 20px;
+        margin-left: 0px;
+      }
+      #container {
+        margin-top: 20px;
+        overflow-y: auto;
+        height: 70vh;
+        direction: rtl;
+      }
+      div {
+        direction: ltr;
+      }
+
+      a {
+        color: inherit;
+      }
+    </style>
+    <title>GeoZebra</title>
+  </head>
+  <body>
+    <a href="../">Back</a><br><br>
+    <p>Add function:</p><br>
+    <input type="text" id="input"><br>
+    <!--
+    <p>Resolution:</p><br>
+    <input type="range" id="resolution" min="100" max="1000" value="500"><br>
+    -->
+    <script src="main.js"></script>
+    <script src="Line.js"></script>
+    <div id="container"></div>
+  </body>
+</html>
