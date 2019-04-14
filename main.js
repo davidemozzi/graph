@@ -11,6 +11,7 @@ let body;
 let input;
 // let resolution;
 let container;
+let oneTouch;
 
 function setup() {
   createCanvas(innerWidth, innerHeight);
@@ -120,9 +121,17 @@ function drawPlain() {
 
 function mouseWheel(e) {
   let oldScale = SCALE;
-  SCALE = constrain(SCALE - e.delta / 10, 10, 1000);
-  xOffset *= SCALE / oldScale;
-  yOffset *= SCALE / oldScale;
+  SCALE *= 1 - Math.sign(e.delta) / 10;
+  if (SCALE < 4) {
+    SCALE = 4;
+  }
+  if (SCALE > 2000) {
+    SCALE = 2000;
+  }
+  let x = mouseX - width / 2 - xOffset;
+  let y = mouseY - height / 2 - yOffset;
+  xOffset += x * (1 - SCALE / oldScale);
+  yOffset += y * (1 - SCALE / oldScale);
 }
 
 function windowResized() {
@@ -136,13 +145,17 @@ function touchStarted(e) {
   if (e.type == 'mousedown') {
     return;
   }
-  if (e.touches.length >= 2) {
-    x0 = null;
-    dist = sqrt((e.touches[0].clientX - e.touches[1].clientX)**2 + (e.touches[0].clientY - e.touches[1].clientY)**2);
-  }
-  if (e.touches.length == 1) {
+  if (e.touches.length > 0) {
     x0 = e.touches[0].clientX;
     y0 = e.touches[0].clientY;
+    if (e.touches.length > 1) {
+      dist = sqrt((e.touches[0].clientX - e.touches[1].clientX)**2 + (e.touches[0].clientY - e.touches[1].clientY)**2);
+    }
+    if (e.touches.length == 1) {
+      oneTouch = true;
+    } else {
+      oneTouch = false;
+    }
   }
 }
 
@@ -152,10 +165,14 @@ function touchMoved(e) {
     let oldScale = SCALE;
     SCALE = constrain(SCALE + d - dist, 10, 1000);
     dist = d;
-    xOffset *= SCALE / oldScale;
-    yOffset *= SCALE / oldScale;
+    let middleX = e.touches[0].clientX + e.touches[1].clientX;
+    let middleY = e.touches[0].clientY + e.touches[1].clientY;
+    let x = middleX / 2 - width / 2 - xOffset;
+    let y = middleY / 2 - height / 2 - yOffset;
+    xOffset += x * (1 - SCALE / oldScale);
+    yOffset += y * (1 - SCALE / oldScale);
   }
-  if (e.touches.length == 1 && x0 != null) {
+  if (e.touches.length == 1 && oneTouch) {
     xOffset += e.touches[0].clientX - x0;
     yOffset += e.touches[0].clientY - y0;
     x0 = e.touches[0].clientX;
