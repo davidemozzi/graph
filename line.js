@@ -8,7 +8,7 @@ class Line {
       g = random(255);
       b = random(255);
     }
-    while(r + g + b > 510);
+    while (r + g + b > 510);
     this.color = color(r, g, b);
   }
 
@@ -19,17 +19,19 @@ class Line {
     let a = -(width / 2 + xOffset) / SCALE;
     let b = (width / 2 - xOffset) / SCALE;
     beginShape();
+    this.drawing = true;
     for (let i = a; i < b; i += 1 / RESOLUTION) {
       let fi = this.f(i);
       if (this.drawing == true) {
-        let x = i * SCALE;
-        let y = -fi * SCALE;
-        vertex(x, y);
-        if (abs(fi) > upperBound * 5) {
+        if (isNaN(fi) || abs(fi) > upperBound * 5) {
           endShape();
           this.drawing = false;
+        } else {
+          let x = i * SCALE;
+          let y = -fi * SCALE;
+          vertex(x, y);
         }
-      } else if (abs(fi) < upperBound * 5) {
+      } else if (!isNaN(fi) && abs(fi) < upperBound * 5) {
         beginShape();
         this.drawing = true;
       }
